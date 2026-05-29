@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Falamigo">
+<meta name="theme-color" content="#667eea">
+<link rel="canonical" href="https://SEU-USUARIO.github.io/falamigo/" />
+<link rel="manifest" href="/falamigo/manifest.json">
+<link rel="apple-touch-icon" href="/falamigo/icon-192.png">
+<title>FALAMIGO - Meu Comunicador</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#E3F2FD;height:100vh;overflow:hidden}
+
+.splash{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity .5s}
+.splash.hide{opacity:0;pointer-events:none}
+.splash .mascote{width:130px;height:130px;background:#27AE60;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 40px rgba(0,0,0,.3);animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+.splash h1{color:white;font-size:2.2rem;margin-top:15px}
+.splash p{color:rgba(255,255,255,.8);margin:5px 0 20px}
+.splash input{padding:15px;border:none;border-radius:12px;font-size:1.1rem;text-align:center;width:280px;margin-bottom:10px;outline:none;-webkit-appearance:none}
+.splash button{padding:15px 50px;background:white;color:#667eea;border:none;border-radius:30px;font-size:1.2rem;font-weight:700;cursor:pointer;-webkit-appearance:none}
+
+.app{display:none;flex-direction:column;height:100vh;max-width:600px;margin:0 auto;background:#E3F2FD}
+.app.on{display:flex}
+
+.header{background:#2C3E50;color:white;padding:12px;text-align:center}
+.header h1{font-size:1.2rem}
+
+.display{background:#3498DB;color:white;padding:15px;min-height:60px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:1.1rem;font-weight:600}
+
+.controls{display:flex;gap:5px;padding:8px;background:white}
+.controls button{flex:1;padding:12px;border:none;border-radius:10px;font-size:.85rem;font-weight:700;color:white;cursor:pointer;-webkit-appearance:none}
+.btn-falar{background:#27AE60}.btn-desfazer{background:#F39C12}.btn-limpar{background:#E74C3C}
+
+.content{flex:1;overflow-y:auto;padding:10px;-webkit-overflow-scrolling:touch}
+
+.tabs{display:flex;gap:5px;margin-bottom:10px;overflow-x:auto;padding-bottom:5px}
+.tab-btn{padding:10px 15px;border:none;border-radius:20px;font-size:.8rem;font-weight:700;color:white;cursor:pointer;white-space:nowrap;-webkit-appearance:none}
+.tab-btn.active{box-shadow:0 0 0 3px rgba(0,0,0,.2)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.card-btn{padding:20px 10px;border:none;border-radius:12px;font-size:1rem;font-weight:700;color:white;cursor:pointer;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;-webkit-appearance:none}
+.card-btn:active{transform:scale(0.95);filter:brightness(0.9)}
+.card-btn .ico{font-size:2rem}
+
+.nav{display:flex;background:white;box-shadow:0 -2px 10px rgba(0,0,0,.1);padding-bottom:env(safe-area-inset-bottom)}
+.nav button{flex:1;padding:10px 5px;border:none;background:white;color:#666;font-size:.7rem;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;-webkit-appearance:none}
+.nav button.on{background:#2C3E50;color:white}
+.nav button .ico{font-size:1.4rem}
+
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:12px 24px;border-radius:25px;font-size:.9rem;z-index:99999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="splash" id="splash">
+<div class="mascote">
+<svg width="75" height="75" viewBox="0 0 100 100">
+<ellipse cx="50" cy="55" rx="32" ry="28" fill="white"/>
+<circle cx="38" cy="48" r="6" fill="#333"/><circle cx="62" cy="48" r="6" fill="#333"/>
+<circle cx="38" cy="48" r="2" fill="white"/><circle cx="62" cy="48" r="2" fill="white"/>
+<path d="M 35 62 Q 50 72 65 62" stroke="#333" stroke-width="2.5" fill="none"/>
+<path d="M 25 52 Q 18 45 22 38" stroke="white" stroke-width="3" fill="none"/>
+<path d="M 75 52 Q 82 45 78 38" stroke="white" stroke-width="3" fill="none"/>
+</svg>
+</div>
+<h1>FALAMIGO</h1>
+<p>Seu comunicador pessoal</p>
+<input type="text" id="nomeUser" placeholder="Digite seu nome" maxlength="20" autocapitalize="words">
+<button onclick="entrar()">COMEÇAR</button>
+</div>
+
+<div class="app" id="app">
+<div class="header"><h1>FALAMIGO</h1></div>
+<div class="display" id="display">Toque nos botoes para falar...</div>
+<div class="controls">
+<button class="btn-falar" onclick="falarTudo()">FALAR</button>
+<button class="btn-desfazer" onclick="desfazer()">DESFAZER</button>
+<button class="btn-limpar" onclick="limpar()">LIMPAR</button>
+</div>
+<div class="content" id="content"></div>
+<div class="nav">
+<button class="on" onclick="mudarTela('falar',this)"><span class="ico">*</span>FALAR</button>
+<button onclick="mudarTela('criar',this)"><span class="ico">+</span>CRIAR</button>
+<button onclick="mudarTela('config',this)"><span class="ico">#</span>AJUSTES</button>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var dados={abas:[{nome:"Gosto",cor:"#27AE60",itens:[{ico:"*",t:"Quero pizza"},{ico:"*",t:"Quero sorvete"},{ico:"*",t:"Quero jogar"},{ico:"*",t:"Quero ver TV"},{ico:"*",t:"Quero musica"},{ico:"*",t:"Quero nadar"}]},{nome:"Preciso",cor:"#3498DB",itens:[{ico:"~",t:"Quero agua"},{ico:"~",t:"Quero comer"},{ico:"~",t:"Preciso ir ao banheiro"},{ico:"~",t:"Quero dormir"},{ico:"~",t:"Quero tomar banho"},{ico:"~",t:"Quero me arrumar"},{ico:"~",t:"Quero escovar os dentes"},{ico:"~",t:"Preciso tomar remedio"},{ico:"~",t:"Quero lavar as maos"}]},{nome:"Sinto",cor:"#F39C12",itens:[{ico:":)",t:"Estou feliz"},{ico:":(",t:"Estou triste"},{ico:">:(",t:"Estou com raiva"},{ico:":O",t:"Estou com medo"},{ico:"|_",t:"Estou cansado"},{ico:"x",t:"Estou com dor"}]},{nome:"Familia",cor:"#E91E63",itens:[{ico:"M",t:"Quero minha mae"},{ico:"P",t:"Quero meu pai"},{ico:"V",t:"Quero minha vovo"},{ico:"V",t:"Quero meu vovo"},{ico:"I",t:"Quero minha irma"},{ico:"I",t:"Quero meu irmao"}]},{nome:"Emergencia",cor:"#E74C3C",itens:[{ico:"!",t:"Preciso de ajuda"},{ico:"!",t:"Estou machucado"},{ico:"!",t:"Preciso de remedio"},{ico:"!",t:"Quero o medico"},{ico:"!",t:"Preciso ir ao hospital"},{ico:"!",t:"Quero ligar para os meus pais"}]}]};
+var frase=[],synth=null,vozPT=null;
+
+function init(){if("speechSynthesis"in window){synth=window.speechSynthesis;var c=function(){var v=synth.getVoices();vozPT=v.find(function(x){return x.lang.indexOf("pt")!==-1});if(!vozPT&&v.length)vozPT=v[0]};if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=c;c()}}
+function falar(txt){if(!txt||!synth)return;var u=new SpeechSynthesisUtterance(txt);u.lang="pt-BR";u.rate=1;if(vozPT)u.voice=vozPT;synth.cancel();synth.speak(u)}
+function entrar(){var n=document.getElementById("nomeUser").value.trim();if(!n){alert("Digite seu nome!");return}document.getElementById("splash").classList.add("hide");document.getElementById("app").classList.add("on");setTimeout(function(){falar("Bem-vindo, "+n+"!")},300);mudarTela("falar",document.querySelector(".nav button"))}
+function atualizar(){var d=document.getElementById("display");d.textContent=frase.length===0?"Toque nos botoes para falar...":frase.join(" > ")}
+function addFrase(t){frase.push(t);atualizar();falar(t)}
+function falarTudo(){if(frase.length===0){falar("Adicione frases primeiro");return}falar(frase.join(". "))}
+function desfazer(){if(frase.length>0){frase.pop();atualizar()}}
+function limpar(){frase=[];atualizar()}
+function mudarTela(t,b){document.querySelectorAll(".nav button").forEach(function(x){x.classList.remove("on")});if(b)b.classList.add("on");var c=document.getElementById("content");c.innerHTML="";if(t==="falar")renderFalar(c);else if(t==="criar")renderCriar(c);else if(t==="config")renderConfig(c)}
+function renderFalar(c){var t=document.createElement("div");t.className="tabs";dados.abas.forEach(function(a,i){var b=document.createElement("button");b.className="tab-btn"+(i===0?" active":"");b.style.background=a.cor;b.textContent=a.nome;b.onclick=function(){document.querySelectorAll(".tab-btn").forEach(function(x){x.classList.remove("active")});b.classList.add("active");mostrarItens(g,i)};t.appendChild(b)});c.appendChild(t);var g=document.createElement("div");g.className="grid";c.appendChild(g);mostrarItens(g,0)}
+function mostrarItens(g,i){g.innerHTML="";var a=dados.abas[i];if(!a)return;a.itens.forEach(function(it){var b=document.createElement("button");b.className="card-btn";b.style.background=a.cor;b.innerHTML='<span class="ico">'+it.ico+'</span><span>'+it.t+'</span>';b.onclick=function(){addFrase(it.t)};g.appendChild(b)})}
+function renderCriar(c){var f1=document.createElement("div");f1.style.cssText="background:white;padding:15px;border-radius:12px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,.1)";f1.innerHTML='<h3 style="color:#2C3E50;margin-bottom:10px;font-size:1rem">Criar Nova Aba</h3><input type="text" id="na" placeholder="Nome da aba" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;margin-bottom:8px;outline:none"><select id="nc" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;margin-bottom:8px"><option value="#27AE60">Verde</option><option value="#3498DB">Azul</option><option value="#F39C12">Laranja</option><option value="#E91E63">Rosa</option><option value="#E74C3C">Vermelho</option><option value="#9C27B0">Roxo</option><option value="#00BCD4">Ciano</option><option value="#795548">Marrom</option></select><button onclick="ca()" style="width:100%;padding:12px;background:#27AE60;color:white;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer">CRIAR ABA</button>';c.appendChild(f1);var f2=document.createElement("div");f2.style.cssText="background:white;padding:15px;border-radius:12px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,.1)";f2.innerHTML='<h3 style="color:#2C3E50;margin-bottom:10px;font-size:1rem">Adicionar Botao</h3><select id="ia" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;margin-bottom:8px">'+dados.abas.map(function(a,i){return'<option value="'+i+'">'+a.nome+'</option>'}).join("")+'</select><input type="text" id="ie" placeholder="Icone (ex: *)" maxlength="10" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;margin-bottom:8px;outline:none"><input type="text" id="it" placeholder="O que falar?" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;margin-bottom:8px;outline:none"><button onclick="ci()" style="width:100%;padding:12px;background:#27AE60;color:white;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer">ADICIONAR BOTAO</button>';c.appendChild(f2)}
+function ca(){var n=document.getElementById("na").value.trim(),c=document.getElementById("nc").value;if(!n){toast("Digite um nome!");return}dados.abas.push({nome:n,cor:c,itens:[]});toast("Aba criada: "+n);document.getElementById("na").value=""}
+function ci(){var i=parseInt(document.getElementById("ia").value),e=document.getElementById("ie").value.trim()||"*",t=document.getElementById("it").value.trim();if(!t){toast("Digite o texto!");return}dados.abas[i].itens.push({ico:e,t:t});toast("Botao adicionado!");document.getElementById("ie").value="";document.getElementById("it").value=""}
+function renderConfig(c){var f=document.createElement("div");f.style.cssText="background:white;padding:15px;border-radius:12px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,.1)";f.innerHTML='<h3 style="color:#2C3E50;margin-bottom:10px;font-size:1rem">Configuracoes</h3><button onclick="rd()" style="width:100%;padding:12px;background:#E74C3C;color:white;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer">RESETAR TUDO</button>';c.appendChild(f)}
+function rd(){if(!confirm("Voltar ao padrao?"))return;location.reload()}
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},3000)}
+document.addEventListener("DOMContentLoaded",init);
+document.body.addEventListener("touchstart",function(){if(synth&&!synth.speaking){var u=new SpeechSynthesisUtterance("");synth.speak(u);synth.cancel()}},{once:true});
+
+// Service Worker para offline
+if (navigator.serviceWorker) {
+  navigator.serviceWorker.register('/falamigo/sw.js', {scope: '/falamigo/'})
+}
+</script>
+</body>
+</html>
