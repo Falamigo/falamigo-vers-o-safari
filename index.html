@@ -17,7 +17,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 .splash{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10000;transition:opacity .5s}
 .splash.hide{opacity:0;pointer-events:none}
-.splash .mascote{width:130px;height:130px;background:#27AE60;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 40px rgba(0,0,0,.3);animation:float 3s ease-in-out infinite}
+.splash .mascote{width:140px;height:140px;background:linear-gradient(135deg,#27AE60,#2ecc71);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 40px rgba(0,0,0,.3);animation:float 3s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
 .splash h1{color:white;font-size:2.2rem;margin-top:15px}
 .splash p{color:rgba(255,255,255,.8);margin:5px 0 20px}
@@ -43,9 +43,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tab-btn.active{box-shadow:0 0 0 3px rgba(0,0,0,.2)}
 
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.card-btn{padding:20px 10px;border:none;border-radius:12px;font-size:1rem;font-weight:700;color:white;cursor:pointer;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;-webkit-appearance:none}
+.card-btn{padding:15px 8px;border:none;border-radius:12px;font-size:.9rem;font-weight:700;color:white;cursor:pointer;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;-webkit-appearance:none}
 .card-btn:active{transform:scale(0.95);filter:brightness(0.9)}
-.card-btn .ico{font-size:2rem}
+.card-btn .ico{width:50px;height:50px;display:flex;align-items:center;justify-content:center}
+.card-btn .ico svg{width:40px;height:40px}
 
 .nav{display:flex;background:white;box-shadow:0 -2px 10px rgba(0,0,0,.1);padding-bottom:env(safe-area-inset-bottom)}
 .nav button{flex:1;padding:10px 5px;border:none;background:white;color:#666;font-size:.7rem;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;-webkit-appearance:none}
@@ -64,7 +65,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <div class="splash" id="splash">
 <div class="mascote">
-<svg width="75" height="75" viewBox="0 0 100 100">
+<svg width="90" height="90" viewBox="0 0 100 100">
 <ellipse cx="50" cy="55" rx="32" ry="28" fill="white"/>
 <circle cx="38" cy="48" r="6" fill="#333"/><circle cx="62" cy="48" r="6" fill="#333"/>
 <circle cx="38" cy="48" r="2" fill="white"/><circle cx="62" cy="48" r="2" fill="white"/>
@@ -98,7 +99,89 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="toast" id="toast"></div>
 
 <script>
-var dados={abas:[{nome:"Gosto",cor:"#27AE60",itens:[{ico:"*",t:"Quero pizza"},{ico:"*",t:"Quero sorvete"},{ico:"*",t:"Quero jogar"},{ico:"*",t:"Quero ver TV"},{ico:"*",t:"Quero musica"},{ico:"*",t:"Quero nadar"}]},{nome:"Preciso",cor:"#3498DB",itens:[{ico:"~",t:"Quero agua"},{ico:"~",t:"Quero comer"},{ico:"~",t:"Preciso ir ao banheiro"},{ico:"~",t:"Quero dormir"},{ico:"~",t:"Quero tomar banho"},{ico:"~",t:"Quero me arrumar"},{ico:"~",t:"Quero escovar os dentes"},{ico:"~",t:"Preciso tomar remedio"},{ico:"~",t:"Quero lavar as maos"}]},{nome:"Sinto",cor:"#F39C12",itens:[{ico:":)",t:"Estou feliz"},{ico:":(",t:"Estou triste"},{ico:">:(",t:"Estou com raiva"},{ico:":O",t:"Estou com medo"},{ico:"|_",t:"Estou cansado"},{ico:"x",t:"Estou com dor"}]},{nome:"Familia",cor:"#E91E63",itens:[{ico:"M",t:"Quero minha mae"},{ico:"P",t:"Quero meu pai"},{ico:"V",t:"Quero minha vovo"},{ico:"V",t:"Quero meu vovo"},{ico:"I",t:"Quero minha irma"},{ico:"I",t:"Quero meu irmao"}]},{nome:"Emergencia",cor:"#E74C3C",itens:[{ico:"!",t:"Preciso de ajuda"},{ico:"!",t:"Estou machucado"},{ico:"!",t:"Preciso de remedio"},{ico:"!",t:"Quero o medico"},{ico:"!",t:"Preciso ir ao hospital"},{ico:"!",t:"Quero ligar para os meus pais"}]}]};
+// SVGs dos desenhos
+var svgs = {
+  pizza: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#FFD93D" stroke="#E8A317" stroke-width="3"/><circle cx="35" cy="40" r="5" fill="#E74C3C"/><circle cx="55" cy="35" r="5" fill="#E74C3C"/><circle cx="65" cy="50" r="5" fill="#E74C3C"/><circle cx="45" cy="60" r="5" fill="#E74C3C"/><circle cx="60" cy="65" r="5" fill="#E74C3C"/><path d="M 50 10 L 50 50" stroke="#8B4513" stroke-width="4" stroke-linecap="round"/></svg>',
+  sorvete: '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="35" rx="25" ry="20" fill="#FF69B4"/><ellipse cx="50" cy="35" rx="20" ry="15" fill="#FFB6C1"/><path d="M 50 55 L 50 90" stroke="#D2691E" stroke-width="8" stroke-linecap="round"/></svg>',
+  jogar: '<svg viewBox="0 0 100 100"><rect x="15" y="25" width="70" height="45" rx="8" fill="#333"/><rect x="20" y="30" width="60" height="30" rx="4" fill="#4CAF50"/><circle cx="35" cy="55" r="6" fill="#E74C3C"/><circle cx="65" cy="55" r="6" fill="#3498DB"/><rect x="30" y="35" width="10" height="4" fill="#FFF"/><rect x="60" y="35" width="10" height="4" fill="#FFF"/></svg>',
+  tv: '<svg viewBox="0 0 100 100"><rect x="15" y="20" width="70" height="50" rx="5" fill="#2C3E50"/><rect x="20" y="25" width="60" height="35" rx="3" fill="#3498DB"/><path d="M 35 42 L 45 52 L 65 32" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><rect x="40" y="70" width="20" height="8" fill="#7F8C8D"/><rect x="30" y="78" width="40" height="4" fill="#7F8C8D"/></svg>',
+  musica: '<svg viewBox="0 0 100 100"><circle cx="35" cy="65" r="18" fill="#E74C3C"/><circle cx="75" cy="45" r="14" fill="#3498DB"/><rect x="50" y="20" width="6" height="45" fill="#333"/><rect x="50" y="20" width="30" height="6" fill="#333"/></svg>',
+  nadar: '<svg viewBox="0 0 100 100"><path d="M 10 50 Q 30 30 50 50 Q 70 70 90 50" stroke="#3498DB" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M 10 65 Q 30 45 50 65 Q 70 85 90 65" stroke="#3498DB" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="70" cy="35" r="8" fill="#FFD93D"/></svg>',
+  agua: '<svg viewBox="0 0 100 100"><path d="M 50 20 Q 30 50 30 65 Q 30 80 50 80 Q 70 80 70 65 Q 70 50 50 20" fill="#3498DB"/><ellipse cx="40" cy="55" rx="4" ry="8" fill="white" opacity="0.4"/><ellipse cx="55" cy="45" rx="3" ry="6" fill="white" opacity="0.4"/></svg>',
+  comer: '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="55" rx="30" ry="22" fill="#F4A460"/><ellipse cx="50" cy="50" rx="25" ry="18" fill="#DEB887"/><circle cx="40" cy="48" r="4" fill="#8B4513"/><circle cx="55" cy="45" r="4" fill="#8B4513"/><circle cx="50" cy="58" r="4" fill="#8B4513"/><rect x="45" y="25" width="10" height="15" fill="#228B22" rx="3"/></svg>',
+  banheiro: '<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="50" rx="5" fill="#ECF0F1" stroke="#BDC3C7" stroke-width="2"/><ellipse cx="50" cy="25" rx="20" ry="12" fill="#3498DB"/><rect x="35" y="55" width="30" height="25" rx="3" fill="#3498DB" opacity="0.3"/><circle cx="50" cy="40" r="4" fill="white"/></svg>',
+  dormir: '<svg viewBox="0 0 100 100"><path d="M 70 20 Q 50 20 50 40 Q 50 60 70 60" fill="#FFD93D"/><circle cx="30" cy="30" r="3" fill="white"/><circle cx="20" cy="50" r="3" fill="white"/><circle cx="35" cy="70" r="3" fill="white"/><path d="M 25 80 L 75 80" stroke="#7F8C8D" stroke-width="4" stroke-linecap="round"/><path d="M 30 80 L 30 90" stroke="#7F8C8D" stroke-width="4" stroke-linecap="round"/><path d="M 70 80 L 70 90" stroke="#7F8C8D" stroke-width="4" stroke-linecap="round"/></svg>',
+  banho: '<svg viewBox="0 0 100 100"><rect x="25" y="40" width="50" height="45" rx="5" fill="#ECF0F1" stroke="#BDC3C7" stroke-width="2"/><ellipse cx="50" cy="35" rx="25" ry="12" fill="#3498DB"/><circle cx="40" cy="55" r="3" fill="#3498DB" opacity="0.5"/><circle cx="55" cy="65" r="3" fill="#3498DB" opacity="0.5"/><circle cx="45" cy="75" r="3" fill="#3498DB" opacity="0.5"/></svg>',
+  arrumar: '<svg viewBox="0 0 100 100"><path d="M 30 25 L 70 25 L 60 75 L 40 75 Z" fill="#E74C3C"/><rect x="35" y="30" width="30" height="8" fill="white" rx="2"/><rect x="38" y="45" width="24" height="6" fill="white" rx="2"/><rect x="42" y="58" width="16" height="6" fill="white" rx="2"/></svg>',
+  dentes: '<svg viewBox="0 0 100 100"><rect x="25" y="30" width="50" height="40" rx="8" fill="#3498DB"/><rect x="30" y="35" width="40" height="30" rx="5" fill="white"/><path d="M 35 50 L 45 40 L 55 50 L 65 40" stroke="#3498DB" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  remedio: '<svg viewBox="0 0 100 100"><rect x="30" y="25" width="40" height="50" rx="10" fill="#E74C3C"/><rect x="35" y="30" width="30" height="20" rx="5" fill="white"/><circle cx="50" cy="60" r="8" fill="white"/><rect x="46" y="52" width="8" height="16" fill="#E74C3C"/><rect x="42" y="56" width="16" height="8" fill="#E74C3C"/></svg>',
+  maos: '<svg viewBox="0 0 100 100"><ellipse cx="35" cy="50" rx="12" ry="18" fill="#F4C2A1"/><ellipse cx="65" cy="50" rx="12" ry="18" fill="#F4C2A1"/><circle cx="35" cy="35" r="5" fill="#F4C2A1"/><circle cx="45" cy="30" r="5" fill="#F4C2A1"/><circle cx="55" cy="30" r="5" fill="#F4C2A1"/><circle cx="65" cy="35" r="5" fill="#F4C2A1"/><path d="M 40 70 Q 50 80 60 70" stroke="#3498DB" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+  feliz: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#FFD93D"/><circle cx="35" cy="40" r="5" fill="#333"/><circle cx="65" cy="40" r="5" fill="#333"/><path d="M 30 55 Q 50 75 70 55" stroke="#333" stroke-width="4" fill="none" stroke-linecap="round"/></svg>',
+  triste: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#3498DB"/><circle cx="35" cy="40" r="5" fill="#333"/><circle cx="65" cy="40" r="5" fill="#333"/><path d="M 30 65 Q 50 45 70 65" stroke="#333" stroke-width="4" fill="none" stroke-linecap="round"/></svg>',
+  raiva: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#E74C3C"/><path d="M 25 30 L 40 40" stroke="#333" stroke-width="4" stroke-linecap="round"/><path d="M 75 30 L 60 40" stroke="#333" stroke-width="4" stroke-linecap="round"/><circle cx="35" cy="45" r="5" fill="#333"/><circle cx="65" cy="45" r="5" fill="#333"/><path d="M 35 60 L 65 60" stroke="#333" stroke-width="4" stroke-linecap="round"/></svg>',
+  medo: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#9B59B6"/><circle cx="35" cy="40" r="8" fill="white"/><circle cx="65" cy="40" r="8" fill="white"/><circle cx="35" cy="40" r="4" fill="#333"/><circle cx="65" cy="40" r="4" fill="#333"/><ellipse cx="50" cy="65" rx="8" ry="12" fill="#333"/></svg>',
+  cansado: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#95A5A6"/><path d="M 30 40 L 45 40" stroke="#333" stroke-width="4" stroke-linecap="round"/><path d="M 55 40 L 70 40" stroke="#333" stroke-width="4" stroke-linecap="round"/><path d="M 40 60 Q 50 55 60 60" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+  dor: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#E74C3C"/><path d="M 30 35 L 40 45" stroke="#333" stroke-width="4" stroke-linecap="round"/><path d="M 70 35 L 60 45" stroke="#333" stroke-width="4" stroke-linecap="round"/><circle cx="35" cy="55" r="5" fill="#333"/><circle cx="65" cy="55" r="5" fill="#333"/><path d="M 45 65 Q 50 60 55 65" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+  mae: '<svg viewBox="0 0 100 100"><circle cx="50" cy="30" r="18" fill="#F4C2A1"/><ellipse cx="50" cy="70" rx="25" ry="30" fill="#E91E63"/><circle cx="50" cy="25" r="15" fill="#8B4513"/><path d="M 35 20 Q 50 10 65 20" stroke="#8B4513" stroke-width="4" fill="none" stroke-linecap="round"/></svg>',
+  pai: '<svg viewBox="0 0 100 100"><circle cx="50" cy="30" r="18" fill="#F4C2A1"/><ellipse cx="50" cy="70" rx="28" ry="30" fill="#3498DB"/><circle cx="50" cy="25" r="15" fill="#4A4A4A"/><path d="M 35 20 Q 50 5 65 20" stroke="#4A4A4A" stroke-width="4" fill="none" stroke-linecap="round"/></svg>',
+  vovo: '<svg viewBox="0 0 100 100"><circle cx="50" cy="30" r="18" fill="#F4C2A1"/><ellipse cx="50" cy="70" rx="25" ry="30" fill="#9B59B6"/><circle cx="50" cy="25" r="15" fill="#C0C0C0"/><circle cx="35" cy="30" r="5" fill="#C0C0C0"/><circle cx="65" cy="30" r="5" fill="#C0C0C0"/></svg>',
+  vovo2: '<svg viewBox="0 0 100 100"><circle cx="50" cy="30" r="18" fill="#F4C2A1"/><ellipse cx="50" cy="70" rx="28" ry="30" fill="#795548"/><circle cx="50" cy="25" r="15" fill="#C0C0C0"/><circle cx="35" cy="30" r="5" fill="#C0C0C0"/><circle cx="65" cy="30" r="5" fill="#C0C0C0"/></svg>',
+  irma: '<svg viewBox="0 0 100 100"><circle cx="50" cy="30" r="15" fill="#F4C2A1"/><ellipse cx="50" cy="70" rx="20" ry="25" fill="#FF69B4"/><circle cx="50" cy="25" r="12" fill="#8B4513"/><path d="M 40 20 Q 50 15 60 20" stroke="#8B4513" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+  irmao: '<svg viewBox="0 0 100 100"><circle cx="50" cy="30" r="15" fill="#F4C2A1"/><ellipse cx="50" cy="70" rx="22" ry="25" fill="#27AE60"/><circle cx="50" cy="25" r="12" fill="#4A4A4A"/><path d="M 40 20 Q 50 12 60 20" stroke="#4A4A4A" stroke-width="3" fill="none" stroke-linecap="round"/></svg>',
+  ajuda: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#E74C3C"/><text x="50" y="65" text-anchor="middle" fill="white" font-size="50" font-weight="bold">!</text></svg>',
+  machucado: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#E74C3C"/><rect x="30" y="45" width="40" height="10" fill="white" rx="3" transform="rotate(45 50 50)"/><rect x="30" y="45" width="40" height="10" fill="white" rx="3" transform="rotate(-45 50 50)"/></svg>',
+  remedio2: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#E74C3C"/><rect x="35" y="30" width="30" height="40" rx="8" fill="white"/><rect x="42" y="42" width="16" height="16" fill="#E74C3C" rx="2"/></svg>',
+  medico: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="white" stroke="#E74C3C" stroke-width="4"/><rect x="42" y="25" width="16" height="50" fill="#E74C3C" rx="3"/><rect x="25" y="42" width="50" height="16" fill="#E74C3C" rx="3"/></svg>',
+  hospital: '<svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="50" rx="5" fill="white" stroke="#E74C3C" stroke-width="3"/><rect x="40" y="40" width="20" height="30" fill="#E74C3C" rx="2"/><rect x="30" y="50" width="40" height="10" fill="#E74C3C" rx="2"/><rect x="25" y="75" width="15" height="15" fill="#3498DB" rx="2"/><rect x="60" y="75" width="15" height="15" fill="#3498DB" rx="2"/></svg>',
+  ligar: '<svg viewBox="0 0 100 100"><path d="M 30 25 Q 20 50 30 75 Q 40 90 60 85 Q 80 80 85 60" stroke="#27AE60" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M 75 55 L 85 60 L 90 50" stroke="#27AE60" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+
+var dados={abas:[
+  {nome:"Gosto",cor:"#27AE60",itens:[
+    {svg:"pizza",t:"Quero pizza"},
+    {svg:"sorvete",t:"Quero sorvete"},
+    {svg:"jogar",t:"Quero jogar"},
+    {svg:"tv",t:"Quero ver TV"},
+    {svg:"musica",t:"Quero musica"},
+    {svg:"nadar",t:"Quero nadar"}
+  ]},
+  {nome:"Preciso",cor:"#3498DB",itens:[
+    {svg:"agua",t:"Quero agua"},
+    {svg:"comer",t:"Quero comer"},
+    {svg:"banheiro",t:"Preciso ir ao banheiro"},
+    {svg:"dormir",t:"Quero dormir"},
+    {svg:"banho",t:"Quero tomar banho"},
+    {svg:"arrumar",t:"Quero me arrumar"},
+    {svg:"dentes",t:"Quero escovar os dentes"},
+    {svg:"remedio",t:"Preciso tomar remedio"},
+    {svg:"maos",t:"Quero lavar as maos"}
+  ]},
+  {nome:"Sinto",cor:"#F39C12",itens:[
+    {svg:"feliz",t:"Estou feliz"},
+    {svg:"triste",t:"Estou triste"},
+    {svg:"raiva",t:"Estou com raiva"},
+    {svg:"medo",t:"Estou com medo"},
+    {svg:"cansado",t:"Estou cansado"},
+    {svg:"dor",t:"Estou com dor"}
+  ]},
+  {nome:"Familia",cor:"#E91E63",itens:[
+    {svg:"mae",t:"Quero minha mae"},
+    {svg:"pai",t:"Quero meu pai"},
+    {svg:"vovo",t:"Quero minha vovo"},
+    {svg:"vovo2",t:"Quero meu vovo"},
+    {svg:"irma",t:"Quero minha irma"},
+    {svg:"irmao",t:"Quero meu irmao"}
+  ]},
+  {nome:"Emergencia",cor:"#E74C3C",itens:[
+    {svg:"ajuda",t:"Preciso de ajuda"},
+    {svg:"machucado",t:"Estou machucado"},
+    {svg:"remedio2",t:"Preciso de remedio"},
+    {svg:"medico",t:"Quero o medico"},
+    {svg:"hospital",t:"Preciso ir ao hospital"},
+    {svg:"ligar",t:"Quero ligar para os meus pais"}
+  ]}
+]};
+
 var frase=[],synth=null,vozPT=null;
 
 function init(){if("speechSynthesis"in window){synth=window.speechSynthesis;var c=function(){var v=synth.getVoices();vozPT=v.find(function(x){return x.lang.indexOf("pt")!==-1});if(!vozPT&&v.length)vozPT=v[0]};if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=c;c()}}
@@ -111,20 +194,16 @@ function desfazer(){if(frase.length>0){frase.pop();atualizar()}}
 function limpar(){frase=[];atualizar()}
 function mudarTela(t,b){document.querySelectorAll(".nav button").forEach(function(x){x.classList.remove("on")});if(b)b.classList.add("on");var c=document.getElementById("content");c.innerHTML="";if(t==="falar")renderFalar(c);else if(t==="criar")renderCriar(c);else if(t==="config")renderConfig(c)}
 function renderFalar(c){var t=document.createElement("div");t.className="tabs";dados.abas.forEach(function(a,i){var b=document.createElement("button");b.className="tab-btn"+(i===0?" active":"");b.style.background=a.cor;b.textContent=a.nome;b.onclick=function(){document.querySelectorAll(".tab-btn").forEach(function(x){x.classList.remove("active")});b.classList.add("active");mostrarItens(g,i)};t.appendChild(b)});c.appendChild(t);var g=document.createElement("div");g.className="grid";c.appendChild(g);mostrarItens(g,0)}
-function mostrarItens(g,i){g.innerHTML="";var a=dados.abas[i];if(!a)return;a.itens.forEach(function(it){var b=document.createElement("button");b.className="card-btn";b.style.background=a.cor;b.innerHTML='<span class="ico">'+it.ico+'</span><span>'+it.t+'</span>';b.onclick=function(){addFrase(it.t)};g.appendChild(b)})}
+function mostrarItens(g,i){g.innerHTML="";var a=dados.abas[i];if(!a)return;a.itens.forEach(function(it){var b=document.createElement("button");b.className="card-btn";b.style.background=a.cor;b.innerHTML='<span class="ico">'+svgs[it.svg]+'</span><span>'+it.t+'</span>';b.onclick=function(){addFrase(it.t)};g.appendChild(b)})}
 function renderCriar(c){var f1=document.createElement("div");f1.style.cssText="background:white;padding:15px;border-radius:12px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,.1)";f1.innerHTML='<h3 style="color:#2C3E50;margin-bottom:10px;font-size:1rem">Criar Nova Aba</h3><input type="text" id="na" placeholder="Nome da aba" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;margin-bottom:8px;outline:none"><select id="nc" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;margin-bottom:8px"><option value="#27AE60">Verde</option><option value="#3498DB">Azul</option><option value="#F39C12">Laranja</option><option value="#E91E63">Rosa</option><option value="#E74C3C">Vermelho</option><option value="#9C27B0">Roxo</option><option value="#00BCD4">Ciano</option><option value="#795548">Marrom</option></select><button onclick="ca()" style="width:100%;padding:12px;background:#27AE60;color:white;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer">CRIAR ABA</button>';c.appendChild(f1);var f2=document.createElement("div");f2.style.cssText="background:white;padding:15px;border-radius:12px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,.1)";f2.innerHTML='<h3 style="color:#2C3E50;margin-bottom:10px;font-size:1rem">Adicionar Botao</h3><select id="ia" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;margin-bottom:8px">'+dados.abas.map(function(a,i){return'<option value="'+i+'">'+a.nome+'</option>'}).join("")+'</select><input type="text" id="ie" placeholder="Icone (ex: *)" maxlength="10" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;margin-bottom:8px;outline:none"><input type="text" id="it" placeholder="O que falar?" style="width:100%;padding:12px;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;margin-bottom:8px;outline:none"><button onclick="ci()" style="width:100%;padding:12px;background:#27AE60;color:white;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer">ADICIONAR BOTAO</button>';c.appendChild(f2)}
 function ca(){var n=document.getElementById("na").value.trim(),c=document.getElementById("nc").value;if(!n){toast("Digite um nome!");return}dados.abas.push({nome:n,cor:c,itens:[]});toast("Aba criada: "+n);document.getElementById("na").value=""}
-function ci(){var i=parseInt(document.getElementById("ia").value),e=document.getElementById("ie").value.trim()||"*",t=document.getElementById("it").value.trim();if(!t){toast("Digite o texto!");return}dados.abas[i].itens.push({ico:e,t:t});toast("Botao adicionado!");document.getElementById("ie").value="";document.getElementById("it").value=""}
+function ci(){var i=parseInt(document.getElementById("ia").value),e=document.getElementById("ie").value.trim()||"*",t=document.getElementById("it").value.trim();if(!t){toast("Digite o texto!");return}dados.abas[i].itens.push({svg:"ajuda",t:t});toast("Botao adicionado!");document.getElementById("ie").value="";document.getElementById("it").value=""}
 function renderConfig(c){var f=document.createElement("div");f.style.cssText="background:white;padding:15px;border-radius:12px;margin-bottom:15px;box-shadow:0 2px 10px rgba(0,0,0,.1)";f.innerHTML='<h3 style="color:#2C3E50;margin-bottom:10px;font-size:1rem">Configuracoes</h3><button onclick="rd()" style="width:100%;padding:12px;background:#E74C3C;color:white;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer">RESETAR TUDO</button>';c.appendChild(f)}
 function rd(){if(!confirm("Voltar ao padrao?"))return;location.reload()}
 function toast(m){var t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},3000)}
 document.addEventListener("DOMContentLoaded",init);
 document.body.addEventListener("touchstart",function(){if(synth&&!synth.speaking){var u=new SpeechSynthesisUtterance("");synth.speak(u);synth.cancel()}},{once:true});
-
-// Service Worker para offline
-if (navigator.serviceWorker) {
-  navigator.serviceWorker.register('/falamigo/sw.js', {scope: '/falamigo/'})
-}
+if(navigator.serviceWorker){navigator.serviceWorker.register('/falamigo/sw.js',{scope:'/falamigo/'})}
 </script>
 </body>
 </html>
