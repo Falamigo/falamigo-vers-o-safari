@@ -1,0 +1,21 @@
+{
+  "name": "Falamigo - Comunicador Pessoal",
+  "short_name": "Falamigo",
+  "theme_color": "#667eea",
+  "background_color": "#E3F2FD",
+  "display": "standalone",
+  "scope": "/falamigo/",
+  "start_url": "/falamigo/",
+  "icons": [
+    {
+      "src": "/falamigo/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/falamigo/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
